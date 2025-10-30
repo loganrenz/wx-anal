@@ -120,6 +120,7 @@ class Route:
         """
         self.name = name
         self.vessel = vessel or Vessel.typical_boat()
+        self.variant_name = "direct"  # Default variant
         
         if waypoints:
             self.waypoints = waypoints
@@ -372,6 +373,111 @@ class GulfStream:
         if crosses_stream:
             return 1.5  # Average favorable current
         return 0.0
+
+
+class RouteVariant:
+    """Represents tactical route variations (northern vs southern track)."""
+    
+    @staticmethod
+    def create_variants(
+        base_route_name: str,
+        vessel: Optional[Vessel] = None,
+    ) -> List[Route]:
+        """
+        Create tactical route variants for a base route.
+        
+        Args:
+            base_route_name: Name of base route (e.g., 'hampton-bermuda')
+            vessel: Vessel characteristics
+        
+        Returns:
+            List of Route objects representing variants
+        """
+        if base_route_name not in Route.ROUTES:
+            raise ValueError(f"Unknown route: {base_route_name}")
+        
+        base_def = Route.ROUTES[base_route_name]
+        start = base_def["start"]
+        end = base_def["end"]
+        
+        variants = []
+        
+        # Direct/rhumbline route
+        direct_route = Route(base_route_name, vessel=vessel)
+        direct_route.variant_name = "direct"
+        variants.append(direct_route)
+        
+        # For Hampton-Bermuda and similar routes, create northern and southern variants
+        if base_route_name in ["hampton-bermuda", "beaufort-bermuda"]:
+            # Northern variant: go north first to 37°N, then southeast
+            north_waypoints = [
+                start,
+                (37.0, start[1] - 2.0),  # North then east
+                (36.0, -70.0),  # Exit Gulf Stream north
+                end,
+            ]
+            north_route = Route(
+                f"{base_route_name}-north",
+                waypoints=north_waypoints,
+                vessel=vessel,
+            )
+            north_route.variant_name = "northern"
+            variants.append(north_route)
+            
+            # Southern variant: go south first to 34-35°N, then southeast
+            south_waypoints = [
+                start,
+                (35.0, start[1]),  # South first
+                (34.5, -72.0),  # Exit Gulf Stream south
+                end,
+            ]
+            south_route = Route(
+                f"{base_route_name}-south",
+                waypoints=south_waypoints,
+                vessel=vessel,
+            )
+            south_route.variant_name = "southern"
+            variants.append(south_route)
+        
+        # For Hampton-Antigua, add Bermuda waypoint variants
+        elif base_route_name == "hampton-antigua":
+            # Via Bermuda
+            bermuda = (32.3, -64.8)
+            via_bermuda_waypoints = [start, bermuda, end]
+            via_bermuda_route = Route(
+                f"{base_route_name}-via-bermuda",
+                waypoints=via_bermuda_waypoints,
+                vessel=vessel,
+            )
+            via_bermuda_route.variant_name = "via_bermuda"
+            variants.append(via_bermuda_route)
+        
+        return variants
+    
+    @staticmethod
+    def recommend_best_variant(
+        variants: List[Route],
+        wind_forecasts: Dict[str, Any],
+        wave_forecasts: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Recommend best route variant based on forecasts.
+        
+        Args:
+            variants: List of route variants
+            wind_forecasts: Wind forecast data
+            wave_forecasts: Wave forecast data
+        
+        Returns:
+            Recommendation dictionary
+        """
+        # Placeholder - would analyze each variant
+        # For now, return framework
+        return {
+            "recommended_variant": variants[0].variant_name if variants else "direct",
+            "rationale": "Direct route recommended (analysis not yet implemented)",
+            "alternatives": [v.variant_name for v in variants[1:]] if len(variants) > 1 else [],
+        }
 
 
 def create_route_from_ports(
