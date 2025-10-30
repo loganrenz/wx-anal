@@ -1,0 +1,216 @@
+{
+  "generated_at": "2025-10-30T04:26:57.192586Z",
+  "scenario": {
+    "route": "hampton-bermuda",
+    "departure": "2025-10-31T18:00:00Z"
+  },
+  "forecast_confidence": {
+    "confidence_level": "MODERATE",
+    "confidence_score": 46.800000000000004,
+    "runs_analyzed": 10,
+    "runs_with_cutoff": 8,
+    "detection_rate": 0.8,
+    "recent_trend": "DECREASING",
+    "flip_flops": 4,
+    "recommendation_confidence": "MODERATE"
+  },
+  "sea_state_scenarios": [
+    {
+      "name": "Head Winds & Seas",
+      "wind": {
+        "wind_speed_ms": 15.0,
+        "wind_speed_kt": 29.1576,
+        "true_wind_direction": 90.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 0.0,
+        "wind_position": "HEAD",
+        "apparent_wind_speed": 15.0,
+        "comfort_factor": 15,
+        "assessment": "Difficult: 29 kt on the nose"
+      },
+      "wave": {
+        "wave_height_m": 3.0,
+        "wave_height_ft": 9.84252,
+        "effective_height_m": 3.4799999999999995,
+        "effective_height_ft": 11.417323199999998,
+        "wave_direction": 90.0,
+        "wave_period_s": 7.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 0.0,
+        "wave_position": "HEAD",
+        "steepness": 0.03924646781789639,
+        "steepness_category": "STEEP",
+        "in_gulf_stream": true,
+        "gulf_stream_amplification": 1.16,
+        "comfort_factor": 5,
+        "assessment": "Severe: 11 ft @ 7s on the nose (steep seas)"
+      }
+    },
+    {
+      "name": "Beam Winds & Seas",
+      "wind": {
+        "wind_speed_ms": 15.0,
+        "wind_speed_kt": 29.1576,
+        "true_wind_direction": 0.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 90.0,
+        "wind_position": "BEAM",
+        "apparent_wind_speed": 15.0,
+        "comfort_factor": 35,
+        "assessment": "Challenging: 29 kt on the beam"
+      },
+      "wave": {
+        "wave_height_m": 3.0,
+        "wave_height_ft": 9.84252,
+        "effective_height_m": 3.0,
+        "effective_height_ft": 9.84252,
+        "wave_direction": 0.0,
+        "wave_period_s": 9.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 90.0,
+        "wave_position": "BEAM",
+        "steepness": 0.023741690408357077,
+        "steepness_category": "MODERATE",
+        "in_gulf_stream": false,
+        "gulf_stream_amplification": 1.0,
+        "comfort_factor": 20,
+        "assessment": "Severe: 10 ft @ 9s on the beam (moderate seas)"
+      }
+    },
+    {
+      "name": "Following Winds & Seas",
+      "wind": {
+        "wind_speed_ms": 15.0,
+        "wind_speed_kt": 29.1576,
+        "true_wind_direction": 270.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 180.0,
+        "wind_position": "STERN",
+        "apparent_wind_speed": 15.0,
+        "comfort_factor": 45,
+        "assessment": "Challenging: 29 kt from astern"
+      },
+      "wave": {
+        "wave_height_m": 3.0,
+        "wave_height_ft": 9.84252,
+        "effective_height_m": 3.0,
+        "effective_height_ft": 9.84252,
+        "wave_direction": 270.0,
+        "wave_period_s": 11.0,
+        "vessel_heading": 90.0,
+        "relative_angle": 180.0,
+        "wave_position": "STERN",
+        "steepness": 0.01589319771137953,
+        "steepness_category": "GENTLE",
+        "in_gulf_stream": false,
+        "gulf_stream_amplification": 1.0,
+        "comfort_factor": 40,
+        "assessment": "Uncomfortable: 10 ft @ 11s from astern (gentle seas)"
+      }
+    }
+  ],
+  "route_variants": [
+    {
+      "name": "direct",
+      "waypoints": [
+        [
+          37.0,
+          -76.3
+        ],
+        [
+          32.3,
+          -64.8
+        ]
+      ],
+      "distance_nm": 640
+    },
+    {
+      "name": "northern",
+      "waypoints": [
+        [
+          37.0,
+          -76.3
+        ],
+        [
+          37.0,
+          -78.3
+        ],
+        [
+          36.0,
+          -70.0
+        ],
+        [
+          32.3,
+          -64.8
+        ]
+      ],
+      "distance_nm": 841.4732909055083
+    },
+    {
+      "name": "southern",
+      "waypoints": [
+        [
+          37.0,
+          -76.3
+        ],
+        [
+          35.0,
+          -76.3
+        ],
+        [
+          34.5,
+          -72.0
+        ],
+        [
+          32.3,
+          -64.8
+        ]
+      ],
+      "distance_nm": 718.4996047392441
+    }
+  ],
+  "risk_by_vessel": {
+    "slow": {
+      "risk_score": 21.310344827586206,
+      "risk_level": "LOW",
+      "risk_factors": [
+        "Forecast uncertainty: +10 points (MODERATE confidence)"
+      ],
+      "base_risk": 11.310344827586208,
+      "confidence_adjusted": true,
+      "heading_adjusted": false,
+      "recommendation": "Conditions favorable for departure. Forecast confidence is MODERATE - some run-to-run variation. Monitor next forecast cycle. Monitor forecasts for changes.",
+      "vessel_type": "slow"
+    },
+    "typical": {
+      "risk_score": 21.310344827586206,
+      "risk_level": "LOW",
+      "risk_factors": [
+        "Forecast uncertainty: +10 points (MODERATE confidence)"
+      ],
+      "base_risk": 11.310344827586208,
+      "confidence_adjusted": true,
+      "heading_adjusted": false,
+      "recommendation": "Conditions favorable for departure. Forecast confidence is MODERATE - some run-to-run variation. Monitor next forecast cycle. Monitor forecasts for changes.",
+      "vessel_type": "typical"
+    },
+    "fast": {
+      "risk_score": 21.310344827586206,
+      "risk_level": "LOW",
+      "risk_factors": [
+        "Forecast uncertainty: +10 points (MODERATE confidence)"
+      ],
+      "base_risk": 11.310344827586208,
+      "confidence_adjusted": true,
+      "heading_adjusted": false,
+      "recommendation": "Conditions favorable for departure. Forecast confidence is MODERATE - some run-to-run variation. Monitor next forecast cycle. Monitor forecasts for changes.",
+      "vessel_type": "fast"
+    }
+  },
+  "vessel_recommendations": {
+    "slow": "Acceptable conditions for slow boats, but monitor forecasts. Passage will take 5-6 days.",
+    "typical": "Favorable conditions for typical cruising boats. 4-5 day passage.",
+    "fast": "Good window for fast boats. Can outrun developing systems. 3-4 day passage.",
+    "summary": "Favorable conditions for all vessel types. Good departure window."
+  }
+}
