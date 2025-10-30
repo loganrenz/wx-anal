@@ -45,9 +45,14 @@ def generate_report():
     print("="*60)
     
     # Test different run times (NOAA has delays)
+    # Try recent runs going back 48 hours
     test_times = [
         latest_run - timedelta(hours=6),
         latest_run - timedelta(hours=12),
+        latest_run - timedelta(hours=18),
+        latest_run - timedelta(hours=24),
+        latest_run - timedelta(hours=36),
+        latest_run - timedelta(hours=48),
         latest_run - timedelta(hours=18),
     ]
     
@@ -61,7 +66,6 @@ def generate_report():
                 route_name="hampton-bermuda",
                 run_date=test_time,
                 forecast_days=7,
-                use_mock_data=False,
             )
             
             if data.get("gfs") is not None:
@@ -74,16 +78,21 @@ def generate_report():
             continue
     
     if data is None or data.get("gfs") is None:
-        logger.warning("Could not download real data, using mock data for demonstration")
-        run_date = latest_run
-        data = downloader.download_offshore_route_data(
-            route_name="hampton-bermuda",
-            run_date=run_date,
-            forecast_days=7,
-            use_mock_data=True,
-        )
+        logger.error("Could not download weather data from NOAA servers")
         report.append("")
-        report.append("⚠️ **Note:** Using synthetic data for demonstration (real data unavailable)")
+        report.append("❌ **ERROR:** Could not download weather data")
+        report.append("")
+        report.append("Please check:")
+        report.append("- Internet connection")
+        report.append("- NOAA NOMADS server status: https://nomads.ncep.noaa.gov/")
+        report.append("- Try again with a different date/time")
+        
+        # Write partial report
+        with open("WEATHER_REPORT.md", "w") as f:
+            f.write("\n".join(report))
+        
+        logger.error("Report generation failed - no data available")
+        sys.exit(1)
     else:
         report.append("")
         report.append("✓ **Status:** Using real NOAA model data")

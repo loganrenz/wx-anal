@@ -67,4 +67,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v"
+markers = [
+    "integration: marks tests as integration tests (requires network, may be slow)",
+]
+addopts = "-v -m 'not integration'"  # Skip integration tests by default

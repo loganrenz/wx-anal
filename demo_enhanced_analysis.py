@@ -193,13 +193,18 @@ def generate_demo_report():
     print("Calculating risk with mock route data...")
     print()
     
-    # Use mock data for demonstration
-    data = downloader.download_offshore_route_data(
-        route_name="hampton-bermuda",
-        run_date=departure_date,
-        forecast_days=7,
-        use_mock_data=True,
-    )
+    # Try to download real data, but continue with limited analysis if unavailable
+    try:
+        data = downloader.download_offshore_route_data(
+            route_name="hampton-bermuda",
+            run_date=departure_date,
+            forecast_days=7,
+        )
+    except Exception as e:
+        logger.warning(f"Could not download real data: {e}")
+        logger.info("Demo will continue with simulated route analysis")
+        # Create minimal data structure for demo
+        data = {"gfs": None, "gefs": None, "ww3": None}
     
     route = Route("hampton-bermuda", vessel=vessel)
     route_points = route.interpolate_waypoints(num_points=20)
