@@ -86,6 +86,86 @@ print(f"Risk Level: {risk['risk_level']} ({risk['risk_score']:.0f}/100)")
 print(f"Recommendation: {risk['recommendation']}")
 ```
 
+### Advanced Analysis
+
+```python
+from wx_anal import SeaStateAnalyzer, ForecastConfidence, RouteVariant
+
+# Heading-relative analysis
+sea_state = SeaStateAnalyzer()
+
+# Analyze wind relative to vessel heading
+wind_analysis = sea_state.analyze_heading_relative_wind(
+    wind_speed=15.0,  # m/s
+    wind_direction=45.0,  # degrees FROM
+    vessel_heading=90.0,  # degrees TO
+    vessel_speed=6.0,  # knots
+)
+print(f"Wind: {wind_analysis['assessment']}")
+print(f"Position: {wind_analysis['wind_position']}")  # HEAD, BEAM, or STERN
+
+# Analyze waves with Gulf Stream effects
+wave_analysis = sea_state.analyze_heading_relative_waves(
+    wave_height=3.0,  # meters
+    wave_direction=45.0,
+    wave_period=7.0,  # seconds
+    vessel_heading=90.0,
+    in_gulf_stream=True,
+    current_speed=2.0,  # knots
+    current_direction=90.0,
+)
+print(f"Waves: {wave_analysis['assessment']}")
+print(f"Steepness: {wave_analysis['steepness_category']}")
+print(f"Gulf Stream amplification: {wave_analysis['gulf_stream_amplification']:.2f}x")
+
+# Combined discomfort assessment
+discomfort = sea_state.calculate_combined_discomfort(wind_analysis, wave_analysis)
+print(f"Comfort: {discomfort['category']} - {discomfort['description']}")
+
+# Forecast confidence from multiple runs
+forecast_conf = ForecastConfidence()
+
+# Analyze consistency across model runs (from multi-run analysis)
+multi_run_results = [
+    {"success": True, "cutoff_detected": True},
+    {"success": True, "cutoff_detected": True},
+    {"success": True, "cutoff_detected": False},
+    # ... more runs
+]
+confidence = forecast_conf.analyze_cutoff_consistency(multi_run_results)
+print(f"Confidence: {confidence['confidence_level']}")
+print(f"Detection rate: {confidence['detection_rate']:.0%}")
+print(f"Flip-flops: {confidence['flip_flops']}")
+
+# Adjust risk for confidence
+adjusted = forecast_conf.adjust_risk_for_confidence(
+    base_risk_score=50.0,
+    confidence_results=confidence
+)
+print(f"Adjusted risk: {adjusted['adjusted_risk']:.0f}/100")
+print(f"Explanation: {adjusted['explanation']}")
+
+# Create route variants
+vessel = Vessel.typical_boat()
+variants = RouteVariant.create_variants("hampton-bermuda", vessel)
+
+print(f"\nAvailable variants: {[v.variant_name for v in variants]}")
+for variant in variants:
+    print(f"- {variant.variant_name}: {len(variant.waypoints)} waypoints")
+    print(f"  Distance: {variant._calculate_total_distance():.0f} nm")
+
+# Enhanced risk scoring with all features
+enhanced_risk = analyzer.score_route_risk_enhanced(
+    wind_results=wind_results,
+    wave_results=wave_results,
+    cutoff_results=cutoff_results,
+    confidence_results=confidence,
+    vessel_name="typical",
+)
+print(f"\nEnhanced Risk: {enhanced_risk['risk_level']} ({enhanced_risk['risk_score']:.0f}/100)")
+print(f"Recommendation: {enhanced_risk['recommendation']}")
+```
+
 ### Jupyter Notebook
 
 See `notebooks/offshore_route_analysis.ipynb` for a comprehensive example analyzing departure windows for Hampton to Bermuda/Antigua routes.
@@ -113,9 +193,12 @@ jupyter notebook notebooks/offshore_route_analysis.ipynb
 ### Route-Specific Analysis
 
 - **Wind Conditions**: Sample 10m winds along route, identify hazard periods
-- **Wave Conditions**: Analyze significant wave heights from WW3
+- **Wave Conditions**: Analyze significant wave heights and periods from WW3
 - **Thresholds**: Configurable wind (30 kt default) and wave (3m default) limits
 - **Timeline**: Hour-by-hour conditions along the route
+- **Heading-Relative Analysis**: Wind/wave conditions relative to vessel heading (head/beam/stern)
+- **Wave Steepness**: Calculate wave steepness and period for comfort assessment
+- **Gulf Stream Effects**: Wave amplification in opposing currents
 
 ### Vessel Speed Categories
 
@@ -136,8 +219,25 @@ Multi-factor risk scoring (0-100):
 - **Wind Risk** (0-40 points): Based on % time above 30 kt
 - **Wave Risk** (0-40 points): Based on % time above 3m
 - **Cut-off Low Risk** (0-20 points): Presence of concerning features
+- **Forecast Confidence**: Penalty for inconsistent model runs (0-20 points)
+- **Heading-Relative Discomfort**: Additional risk for head seas and steep waves
 
 Risk levels: LOW (<30), MODERATE (30-60), HIGH (>60)
+
+### Forecast Confidence Analysis
+
+- **Multi-Run Consistency**: Compare multiple GFS runs to detect forecast stability
+- **Flip-Flop Detection**: Identify run-to-run changes in predicted features
+- **Confidence Scoring**: HIGH/MODERATE/LOW based on model agreement
+- **Uncertainty Adjustment**: Increase risk score when forecast is unreliable
+- **Trend Analysis**: Track whether concern is increasing or decreasing
+
+### Route Variants
+
+- **Tactical Options**: Generate northern, southern, and direct route alternatives
+- **Strategic Waypoints**: Different Gulf Stream crossing strategies
+- **Bermuda Bailout**: Option to stop in Bermuda for slow boats
+- **Comparative Analysis**: Evaluate multiple tracks for best conditions
 
 ## Configuration
 
