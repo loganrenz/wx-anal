@@ -226,6 +226,15 @@ class Route:
         total_hours = total_distance_nm / self.vessel.avg_speed_knots
         return departure_time + timedelta(hours=total_hours)
     
+    def get_distance(self) -> float:
+        """
+        Get total route distance in nautical miles.
+        
+        Returns:
+            Distance in nautical miles
+        """
+        return self._calculate_total_distance()
+    
     def _calculate_total_distance(self) -> float:
         """Calculate total route distance in nautical miles."""
         if hasattr(self, 'distance_nm'):

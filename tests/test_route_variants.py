@@ -137,6 +137,6 @@ def test_variant_can_calculate_distance():
     variants = RouteVariant.create_variants("hampton-bermuda")
     
     for variant in variants:
-        distance = variant._calculate_total_distance()
+        distance = variant.get_distance()
         assert distance > 0
         assert distance < 2000  # Reasonable for this route

@@ -152,7 +152,7 @@ variants = RouteVariant.create_variants("hampton-bermuda", vessel)
 print(f"\nAvailable variants: {[v.variant_name for v in variants]}")
 for variant in variants:
     print(f"- {variant.variant_name}: {len(variant.waypoints)} waypoints")
-    print(f"  Distance: {variant._calculate_total_distance():.0f} nm")
+    print(f"  Distance: {variant.get_distance():.0f} nm")
 
 # Enhanced risk scoring with all features
 enhanced_risk = analyzer.score_route_risk_enhanced(

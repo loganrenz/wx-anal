@@ -143,7 +143,7 @@ variants = RouteVariant.create_variants("hampton-bermuda", vessel)
 # Returns: [direct, northern, southern]
 
 for variant in variants:
-    print(f"{variant.variant_name}: {variant._calculate_total_distance():.0f} nm")
+    print(f"{variant.variant_name}: {variant.get_distance():.0f} nm")
     # Analyze each variant with current forecast
 ```
 
