@@ -41,6 +41,7 @@ def analyze_route(
     forecast_days: int = 10,
     departure_port: Optional[str] = None,
     destination_port: Optional[str] = None,
+    use_mock_data: bool = False,
 ) -> None:
     """
     Analyze weather conditions for a route.
@@ -100,11 +101,25 @@ def analyze_route(
             route_name=route.name,
             run_date=departure_time,
             forecast_days=forecast_days,
+            use_mock_data=use_mock_data,
         )
     except Exception as e:
         logger.error(f"Error downloading data: {e}")
-        logger.warning("Continuing with limited analysis...")
-        data = {"gfs": None, "gefs": None, "ww3": None}
+        if not use_mock_data:
+            logger.warning("Trying with mock data instead...")
+            try:
+                data = downloader.download_offshore_route_data(
+                    route_name=route.name,
+                    run_date=departure_time,
+                    forecast_days=forecast_days,
+                    use_mock_data=True,
+                )
+            except:
+                logger.warning("Continuing with limited analysis...")
+                data = {"gfs": None, "gefs": None, "ww3": None}
+        else:
+            logger.warning("Continuing with limited analysis...")
+            data = {"gfs": None, "gefs": None, "ww3": None}
     
     # Analyze features
     print("\n" + "="*60)
@@ -293,6 +308,11 @@ Vessel Speed Categories:
         type=str,
         help="Destination port (for custom routes)"
     )
+    parser.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use mock/synthetic data for demonstration"
+    )
     
     args = parser.parse_args()
     
@@ -304,6 +324,7 @@ Vessel Speed Categories:
             forecast_days=args.days,
             departure_port=args.departure_port,
             destination_port=args.destination_port,
+            use_mock_data=args.mock,
         )
     except Exception as e:
         logger.error(f"Error in route analysis: {e}", exc_info=True)

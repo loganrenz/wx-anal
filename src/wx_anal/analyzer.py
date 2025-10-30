@@ -98,6 +98,8 @@ class WeatherAnalyzer:
                 vort_t = vort_region.isel(time=t_idx)
                 
                 # Find vorticity maxima
+                if vort_t.size == 0:
+                    continue
                 max_vort = float(vort_t.max())
                 
                 if max_vort > vorticity_threshold:

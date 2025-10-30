@@ -283,6 +283,7 @@ class WeatherDownloader:
         route_name: str = "hampton-bermuda",
         run_date: Optional[datetime] = None,
         forecast_days: int = 10,
+        use_mock_data: bool = False,
     ) -> Dict[str, xr.Dataset]:
         """
         Download comprehensive data for offshore route analysis.
@@ -291,10 +292,17 @@ class WeatherDownloader:
             route_name: Route identifier
             run_date: Model run date
             forecast_days: Number of forecast days
+            use_mock_data: If True, generate mock data instead of downloading
 
         Returns:
             Dictionary with 'gfs', 'gefs', and 'ww3' datasets
         """
+        if use_mock_data:
+            logger.info("Using mock data for demonstration")
+            from .mock_data import generate_mock_route_data
+            if run_date is None:
+                run_date = self.get_latest_run("gfs")
+            return generate_mock_route_data(route_name, run_date, forecast_days)
         # Define route bounding boxes
         route_boxes = {
             "hampton-bermuda": {
