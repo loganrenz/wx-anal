@@ -250,9 +250,18 @@ class WeatherAnalyzer:
             # Sample along route
             route_winds = []
             for lat, lon in route_points:
-                # Find nearest grid point
-                ws = windspeed.sel(lat=lat, lon=lon, method="nearest")
-                route_winds.append(ws.values)
+                try:
+                    # Find nearest grid point
+                    ws = windspeed.sel(lat=lat, lon=lon, method="nearest")
+                    route_winds.append(ws.values)
+                except (KeyError, ValueError) as e:
+                    # Point outside data range, skip it
+                    logger.debug(f"Skipping point ({lat}, {lon}): {e}")
+                    continue
+            
+            if not route_winds:
+                logger.warning("No valid route points found in dataset")
+                return results
 
             route_winds = np.array(route_winds)
             
@@ -334,8 +343,17 @@ class WeatherAnalyzer:
             # Sample along route
             route_waves = []
             for lat, lon in route_points:
-                hw = hs.sel(lat=lat, lon=lon, method="nearest")
-                route_waves.append(hw.values)
+                try:
+                    hw = hs.sel(lat=lat, lon=lon, method="nearest")
+                    route_waves.append(hw.values)
+                except (KeyError, ValueError) as e:
+                    # Point outside data range, skip it
+                    logger.debug(f"Skipping point ({lat}, {lon}): {e}")
+                    continue
+            
+            if not route_waves:
+                logger.warning("No valid route points found in wave dataset")
+                return results
 
             route_waves = np.array(route_waves)
             

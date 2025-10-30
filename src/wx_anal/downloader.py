@@ -141,9 +141,14 @@ class WeatherDownloader:
             # Open dataset via OPeNDAP
             ds = xr.open_dataset(url, engine="netcdf4")
             
-            # Select forecast times
+            # Select forecast times (limit to available data)
             if "time" in ds.dims:
-                ds = ds.isel(time=forecast_hours)
+                available_times = len(ds.time)
+                valid_hours = [h for h in forecast_hours if h < available_times]
+                if not valid_hours:
+                    logger.warning(f"No valid forecast hours available. Requested up to {max(forecast_hours)}, but only {available_times} available")
+                    valid_hours = list(range(min(available_times, 50)))  # Use first 50 or less
+                ds = ds.isel(time=valid_hours)
             
             # Select pressure levels for 3D variables
             if "lev" in ds.dims and levels:
