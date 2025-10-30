@@ -115,7 +115,10 @@ class WeatherDownloader:
             run_date = self.get_latest_run("gfs")
 
         if forecast_hours is None:
-            forecast_hours = list(range(0, 121, 6))  # 0 to 120 hours, 6-hour steps
+            # GFS provides 16-day forecast (384 hours)
+            # Hours 0-120: 3-hourly
+            # Hours 123-384: 3-hourly
+            forecast_hours = list(range(0, 121, 3)) + list(range(123, 385, 3))
 
         if levels is None:
             levels = [1000, 850, 700, 500, 300]
@@ -287,8 +290,7 @@ class WeatherDownloader:
         self,
         route_name: str = "hampton-bermuda",
         run_date: Optional[datetime] = None,
-        forecast_days: int = 10,
-        use_mock_data: bool = False,
+        forecast_days: int = 16,
     ) -> Dict[str, xr.Dataset]:
         """
         Download comprehensive data for offshore route analysis.
@@ -296,18 +298,11 @@ class WeatherDownloader:
         Args:
             route_name: Route identifier
             run_date: Model run date
-            forecast_days: Number of forecast days
-            use_mock_data: If True, generate mock data instead of downloading
+            forecast_days: Number of forecast days (default 16 for full GFS range)
 
         Returns:
             Dictionary with 'gfs', 'gefs', and 'ww3' datasets
         """
-        if use_mock_data:
-            logger.info("Using mock data for demonstration")
-            from .mock_data import generate_mock_route_data
-            if run_date is None:
-                run_date = self.get_latest_run("gfs")
-            return generate_mock_route_data(route_name, run_date, forecast_days)
         # Define route bounding boxes
         route_boxes = {
             "hampton-bermuda": {

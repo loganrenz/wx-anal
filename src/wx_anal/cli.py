@@ -38,10 +38,9 @@ def analyze_route(
     route_name: str,
     start_date: Optional[str] = None,
     vessel_speed: str = "typical",
-    forecast_days: int = 10,
+    forecast_days: int = 16,
     departure_port: Optional[str] = None,
     destination_port: Optional[str] = None,
-    use_mock_data: bool = False,
 ) -> None:
     """
     Analyze weather conditions for a route.
@@ -50,7 +49,7 @@ def analyze_route(
         route_name: Route identifier or "custom"
         start_date: Departure date (YYYY-MM-DD)
         vessel_speed: Vessel speed category (slow, typical, fast)
-        forecast_days: Number of forecast days
+        forecast_days: Number of forecast days (default 16 for full GFS range)
         departure_port: Departure port (for custom routes)
         destination_port: Destination port (for custom routes)
     """
@@ -101,25 +100,11 @@ def analyze_route(
             route_name=route.name,
             run_date=departure_time,
             forecast_days=forecast_days,
-            use_mock_data=use_mock_data,
         )
     except Exception as e:
         logger.error(f"Error downloading data: {e}")
-        if not use_mock_data:
-            logger.warning("Trying with mock data instead...")
-            try:
-                data = downloader.download_offshore_route_data(
-                    route_name=route.name,
-                    run_date=departure_time,
-                    forecast_days=forecast_days,
-                    use_mock_data=True,
-                )
-            except:
-                logger.warning("Continuing with limited analysis...")
-                data = {"gfs": None, "gefs": None, "ww3": None}
-        else:
-            logger.warning("Continuing with limited analysis...")
-            data = {"gfs": None, "gefs": None, "ww3": None}
+        logger.error("Cannot proceed without weather data. Please check your internet connection and try again.")
+        sys.exit(1)
     
     # Analyze features
     print("\n" + "="*60)
@@ -293,8 +278,8 @@ Vessel Speed Categories:
     parser.add_argument(
         "--days",
         type=int,
-        default=10,
-        help="Forecast days to analyze (default: 10)"
+        default=16,
+        help="Forecast days to analyze (default: 16, full GFS range)"
     )
     parser.add_argument(
         "--from",
@@ -308,11 +293,6 @@ Vessel Speed Categories:
         type=str,
         help="Destination port (for custom routes)"
     )
-    parser.add_argument(
-        "--mock",
-        action="store_true",
-        help="Use mock/synthetic data for demonstration"
-    )
     
     args = parser.parse_args()
     
@@ -324,7 +304,6 @@ Vessel Speed Categories:
             forecast_days=args.days,
             departure_port=args.departure_port,
             destination_port=args.destination_port,
-            use_mock_data=args.mock,
         )
     except Exception as e:
         logger.error(f"Error in route analysis: {e}", exc_info=True)

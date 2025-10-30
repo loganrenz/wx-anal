@@ -1,0 +1,180 @@
+INFO: Forecast confidence: MODERATE (47/100), detection rate=80.0%, flip_flops=4
+INFO: Using mock data for demonstration
+INFO: Route wind analysis: max=24.4 m/s, 17.4% above threshold
+INFO: Route wave analysis: max=4.2 m, 10.9% above threshold
+INFO: Cut-off low detection: 0 timesteps with vorticity > 8e-05
+INFO: Route risk assessment: LOW (11.3/100)
+INFO: Enhanced risk for slow: LOW (21.3/100)
+INFO: Route risk assessment: LOW (11.3/100)
+INFO: Enhanced risk for typical: LOW (21.3/100)
+INFO: Route risk assessment: LOW (11.3/100)
+INFO: Enhanced risk for fast: LOW (21.3/100)
+/home/runner/work/wx-anal/wx-anal/demo_enhanced_analysis.py:298: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+
+======================================================================
+ENHANCED MARINE WEATHER ANALYSIS DEMONSTRATION
+======================================================================
+
+Scenario: Hampton Roads to Bermuda departure on 2025-10-31 18:00 UTC
+
+======================================================================
+PART 1: FORECAST CONFIDENCE ANALYSIS
+======================================================================
+
+Analyzing consistency across 10 recent GFS model runs...
+
+FORECAST CONFIDENCE RESULTS:
+----------------------------------------------------------------------
+  Runs Analyzed:        10
+  Runs with Cut-off:    8 (80%)
+  Flip-flops:           4
+  Recent Trend:         DECREASING
+  Confidence Level:     MODERATE
+  Confidence Score:     47/100
+
+INTERPRETATION:
+  MODERATE confidence: 80% of runs show the feature. Some run-to-run variation (4 flip-flops). Recent runs show decreasing concern.
+
+======================================================================
+PART 2: SEA STATE ANALYSIS (Heading-Relative)
+======================================================================
+
+Analyzing wind and wave conditions relative to vessel heading...
+
+Scenario: Head Winds & Seas
+----------------------------------------------------------------------
+  Wind: Difficult: 29 kt on the nose
+    Position: HEAD, Comfort: 15/100
+  Waves: Severe: 11 ft @ 7s on the nose (steep seas)
+    Position: HEAD, Steepness: STEEP
+    Gulf Stream Amplification: 1.16x
+  Combined Discomfort: 100/100 - MISERABLE
+    Miserable conditions. Safety concerns, crew fatigue, potential equipment stress.
+
+Scenario: Beam Winds & Seas
+----------------------------------------------------------------------
+  Wind: Challenging: 29 kt on the beam
+    Position: BEAM, Comfort: 35/100
+  Waves: Severe: 10 ft @ 9s on the beam (moderate seas)
+    Position: BEAM, Steepness: MODERATE
+  Combined Discomfort: 76/100 - MISERABLE
+    Miserable conditions. Safety concerns, crew fatigue, potential equipment stress.
+
+Scenario: Following Winds & Seas
+----------------------------------------------------------------------
+  Wind: Challenging: 29 kt from astern
+    Position: STERN, Comfort: 45/100
+  Waves: Uncomfortable: 10 ft @ 11s from astern (gentle seas)
+    Position: STERN, Steepness: GENTLE
+  Combined Discomfort: 58/100 - UNCOMFORTABLE
+    Uncomfortable conditions. Challenging for crew, slow progress.
+
+======================================================================
+PART 3: ROUTE VARIANTS (Tactical Options)
+======================================================================
+
+Generating route alternatives for Hampton to Bermuda...
+
+Available Variants: 3
+----------------------------------------------------------------------
+  DIRECT
+    Waypoints: 2
+    Distance:  640 nm
+    First waypoint: (37.0, -76.3)
+    Last waypoint:  (32.3, -64.8)
+
+  NORTHERN
+    Waypoints: 4
+    Distance:  841 nm
+    First waypoint: (37.0, -76.3)
+    Via: [(37.0, -78.3), (36.0, -70.0)]
+    Last waypoint:  (32.3, -64.8)
+
+  SOUTHERN
+    Waypoints: 4
+    Distance:  718 nm
+    First waypoint: (37.0, -76.3)
+    Via: [(35.0, -76.3), (34.5, -72.0)]
+    Last waypoint:  (32.3, -64.8)
+
+======================================================================
+PART 4: ENHANCED RISK SCORING (All Vessel Classes)
+======================================================================
+
+Calculating risk with mock route data...
+
+Risk Assessment by Vessel Class:
+----------------------------------------------------------------------
+
+SLOW BOATS (5.2 kt avg)
+  Base Risk:          11/100
+  Adjusted Risk:      21/100
+  Risk Level:         LOW
+  Risk Factors:
+    - Forecast uncertainty: +10 points (MODERATE confidence)
+  Recommendation:
+    Conditions favorable for departure.
+    Forecast confidence is MODERATE - some run-to-run variation.
+    Monitor next forecast cycle.
+    Monitor forecasts for changes..
+
+TYPICAL BOATS (6.2 kt avg)
+  Base Risk:          11/100
+  Adjusted Risk:      21/100
+  Risk Level:         LOW
+  Risk Factors:
+    - Forecast uncertainty: +10 points (MODERATE confidence)
+  Recommendation:
+    Conditions favorable for departure.
+    Forecast confidence is MODERATE - some run-to-run variation.
+    Monitor next forecast cycle.
+    Monitor forecasts for changes..
+
+FAST BOATS (7.8 kt avg)
+  Base Risk:          11/100
+  Adjusted Risk:      21/100
+  Risk Level:         LOW
+  Risk Factors:
+    - Forecast uncertainty: +10 points (MODERATE confidence)
+  Recommendation:
+    Conditions favorable for departure.
+    Forecast confidence is MODERATE - some run-to-run variation.
+    Monitor next forecast cycle.
+    Monitor forecasts for changes..
+
+======================================================================
+PART 5: VESSEL-SPECIFIC GUIDANCE SUMMARY
+======================================================================
+
+Comparative Analysis:
+----------------------------------------------------------------------
+
+Summary: Favorable conditions for all vessel types. Good departure window.
+
+SLOW: Acceptable conditions for slow boats, but monitor forecasts. Passage will take 5-6 days.
+
+TYPICAL: Favorable conditions for typical cruising boats. 4-5 day passage.
+
+FAST: Good window for fast boats. Can outrun developing systems. 3-4 day passage.
+
+======================================================================
+ANALYSIS COMPLETE
+======================================================================
+
+Key Takeaways:
+  - Forecast confidence: MODERATE (47/100)
+  - Cut-off low detection rate: 80%
+  - Model flip-flops: 4
+  - Risk varies by vessel: Slow=21, Typical=21, Fast=21
+  - Route variants available: 3 tactical options
+
+This demonstrates the enhanced capabilities:
+  ✓ Forecast confidence assessment
+  ✓ Heading-relative wind/wave comfort
+  ✓ Wave steepness and Gulf Stream effects
+  ✓ Tactical route alternatives
+  ✓ Vessel-specific recommendations
+
+Output saved to: demo_analysis_output.json
+

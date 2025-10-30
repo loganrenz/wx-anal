@@ -18,14 +18,10 @@ def test_end_to_end_route_analysis():
     vessel = Vessel.typical_boat()
     route = Route("hampton-bermuda", vessel=vessel)
     
-    # Download mock data
+    # Generate mock data for testing
+    from wx_anal.mock_data import generate_mock_route_data
     departure = datetime(2025, 10, 29, 18, 0)
-    data = downloader.download_offshore_route_data(
-        route_name="hampton-bermuda",
-        run_date=departure,
-        forecast_days=5,
-        use_mock_data=True,
-    )
+    data = generate_mock_route_data("hampton-bermuda", departure, 5)
     
     # Verify data downloaded
     assert data is not None

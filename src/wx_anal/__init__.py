@@ -10,7 +10,9 @@ __author__ = "Logan Renz"
 from .downloader import WeatherDownloader
 from .analyzer import WeatherAnalyzer
 from .config import Config
-from .routes import Route, Vessel, VesselSpeed, GulfStream
+from .routes import Route, Vessel, VesselSpeed, GulfStream, RouteVariant
+from .sea_state import SeaStateAnalyzer
+from .forecast_confidence import ForecastConfidence
 
 __all__ = [
     "WeatherDownloader",
@@ -20,5 +22,8 @@ __all__ = [
     "Vessel",
     "VesselSpeed",
     "GulfStream",
+    "RouteVariant",
+    "SeaStateAnalyzer",
+    "ForecastConfidence",
     "__version__",
 ]
